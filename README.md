@@ -84,7 +84,7 @@ flutter run
 
 ## 👥 Made By
 
-**Hackstreet Squad**
+Made with ❤️ by **Hackstreet Squad**
 
 We are a team of passionate developers aimed at revolutionizing healthcare accessibility through technology.
 
