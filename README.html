@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareSphere README</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 { border-bottom: 2px solid #eaecef; padding-bottom: 0.3em; margin-bottom: 24px; }
+        h2 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 24px; margin-bottom: 16px; }
+        h3 { margin-top: 24px; margin-bottom: 16px; }
+        ul { padding-left: 2em; }
+        li { margin-bottom: 0.5em; }
+        code { background-color: #f6f8fa; padding: 0.2em 0.4em; border-radius: 3px; font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace; font-size: 85%; }
+        pre { background-color: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto; }
+        pre code { background-color: transparent; padding: 0; }
+        blockquote { border-left: 0.25em solid #dfe2e5; color: #6a737d; padding: 0 1em; margin: 0; }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eaecef; font-size: 0.9em; color: #586069; }
+    </style>
+</head>
+<body>
+
+<h1>CareSphere - A Unified Healthcare Ecosystem</h1>
+
+<p><strong>CareSphere</strong> is a mobile-first healthcare application designed to bridge the gap between patients and healthcare providers. It leverages the power of Flutter for cross-platform performance and Google Gemini AI for intelligent health assistance, offering a seamless experience for appointment booking, real-time queue tracking, and family health management.</p>
+
+<h2>🚩 Problem Statement</h2>
+<p>Healthcare accessibility remains a global challenge, characterized by fragmented services, long hospital wait times, and a lack of immediate, reliable health information.</p>
+<ul>
+    <li><strong>Patients</strong>, especially the elderly and those in remote areas, struggle with booking appointments and managing complex family health records.</li>
+    <li><strong>Healthcare Providers</strong> face inefficiencies in managing patient queues and records manually.</li>
+    <li><strong>Access</strong> to essential medicines and immediate medical advice is often delayed.</li>
+</ul>
+
+<h2>💡 Solution Approach</h2>
+<p>CareSphere addresses these issues by creating a unified ecosystem:</p>
+<ul>
+    <li><strong>For Patients:</strong> A seamless interface to book appointments, track live queues in real-time to minimize waiting, and manage entire family health profiles in one secure location.</li>
+    <li><strong>For Doctors:</strong> A specialized "Doctor Mode" to digitally manage schedules, appointments, and patient records.</li>
+    <li><strong>AI Integration:</strong> Integrated <strong>Google Gemini AI</strong> provides an intelligent "AI Assistant" for instant medical guidance, symptom analysis, and health tips.</li>
+    <li><strong>Medicine Marketplace:</strong> A localized digital shop for ordering pharmaceutical needs with rapid delivery.</li>
+</ul>
+
+<h2>🚀 Impact</h2>
+<ul>
+    <li><strong>Efficiency:</strong> Significantly reduces patient wait times through live queue tracking.</li>
+    <li><strong>Accessibility:</strong> Democratizes access to health advice via the AI Assistant.</li>
+    <li><strong>Better Outcomes:</strong> Centralized family records lead to more informed medical decisions.</li>
+</ul>
+
+<h2>🛠️ Technology Stack</h2>
+
+<h3>Core Framework</h3>
+<ul>
+    <li><strong>Flutter</strong>: For building a high-performance, natively compiled application for mobile from a single codebase.</li>
+</ul>
+
+<h3>Backend & Services (Google Cloud / Firebase)</h3>
+<ul>
+    <li><strong>Firebase Authentication</strong>: Secure user identity management for patients and doctors.</li>
+    <li><strong>Cloud Firestore</strong>: Real-time NoSQL database for syncing appointments, user profiles, and medical records.</li>
+    <li><strong>Google Generative AI (Gemini)</strong>: Powers the in-app medical assistant for natural language health queries.</li>
+</ul>
+
+<h3>Key Packages</h3>
+<ul>
+    <li><code>google_generative_ai</code>: Gemini AI integration.</li>
+    <li><code>firebase_auth</code>, <code>cloud_firestore</code>: Backend integration.</li>
+    <li><code>email_otp</code>: For verifying user emails.</li>
+    <li><code>provider</code> / <code>flutter_riverpod</code> (implied): State management.</li>
+</ul>
+
+<h2>🤖 Google Technologies Integration</h2>
+<p>CareSphere proudly integrates the following Google technologies to delivery a robust solution:</p>
+<ol>
+    <li><strong>Flutter Framework</strong>: Visuals and Logic.</li>
+    <li><strong>Firebase Authentication</strong>: Security and Login.</li>
+    <li><strong>Cloud Firestore</strong>: Real-time Data.</li>
+    <li><strong>Google Gemini AI</strong>: Intelligent Medical Assistance.</li>
+</ol>
+
+<h2>📦 Installation & Setup</h2>
+
+<p>Follow these steps to set up the project locally.</p>
+
+<h3>Prerequisites</h3>
+<ul>
+    <li><a href="https://docs.flutter.dev/get-started/install">Flutter SDK</a> installed on your machine.</li>
+    <li>An IDE (VS Code, Android Studio) with Flutter & Dart plugins.</li>
+    <li>A GitHub account.</li>
+</ul>
+
+<h3>1. Clone the Repository</h3>
+<pre><code>git clone https://github.com/Nusarat-Praveen/CareSphere.git
+cd CareSphere</code></pre>
+
+<h3>2. Install Dependencies</h3>
+<pre><code>flutter pub get</code></pre>
+
+<h3>3. Firebase Configuration</h3>
+<p><em>Note: This project relies on Firebase. You will need your own <code>google-services.json</code> (Android) / <code>GoogleService-Info.plist</code> (iOS) files if you want to run it connected to your own project, or ask the team for access.</em></p>
+
+<h3>4. Run the App</h3>
+<p>Connect a physical device or start an emulator/simulator.</p>
+<pre><code>flutter run</code></pre>
+
+<h2>👥 Made By</h2>
+
+<p>Made with ❤️ by <strong>Hackstreet Squad</strong></p>
+
+<p>We are a team of passionate developers aimed at revolutionizing healthcare accessibility through technology.</p>
+
+<div class="footer">
+    <em>This project was developed for the TechSpirint 2026.</em>
+</div>
+
+</body>
+</html>
