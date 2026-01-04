@@ -90,4 +90,4 @@ We are a team of passionate developers aimed at revolutionizing healthcare acces
 
 ---
 
-*This project was developed for the [Hackathon Name/Event] 2024.*
+*This project was developed for the TechSpirint 2026.*
