@@ -653,7 +653,7 @@ class _PatientRecordsScreenState extends State<PatientRecordsScreen> {
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: noteType,
+                  initialValue: noteType,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.category),

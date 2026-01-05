@@ -544,7 +544,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     prefixIcon: Icon(Icons.calendar_today),
                   ),
                   hint: const Text('Choose date'),
-                  value: selectedDate,
+                  initialValue: selectedDate,
                   items:
                       [
                         'Tomorrow',
@@ -572,7 +572,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     prefixIcon: Icon(Icons.access_time),
                   ),
                   hint: const Text('Choose time'),
-                  value: selectedTime,
+                  initialValue: selectedTime,
                   items:
                       [
                         '9:00 AM',
@@ -820,7 +820,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                 appointment['reason'] as String,
                 appointment['booked'] as bool,
               );
-            }).toList(),
+            }),
 
             const SizedBox(height: 24),
 
@@ -841,7 +841,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                 appointment['reason'] as String,
                 appointment['booked'] as bool,
               );
-            }).toList(),
+            }),
 
             const SizedBox(height: 24),
 
@@ -860,7 +860,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                 appointment['reason'] as String,
                 appointment['booked'] as bool,
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

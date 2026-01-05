@@ -91,21 +91,21 @@ class _DoctorMyProfileScreenState extends State<DoctorMyProfileScreen> {
                 value: emailNotifications,
                 onChanged: (val) =>
                     setDialogState(() => emailNotifications = val),
-                activeColor: Colors.teal,
+                activeThumbColor: Colors.teal,
               ),
               SwitchListTile(
                 title: const Text('Push Notifications'),
                 value: pushNotifications,
                 onChanged: (val) =>
                     setDialogState(() => pushNotifications = val),
-                activeColor: Colors.teal,
+                activeThumbColor: Colors.teal,
               ),
               SwitchListTile(
                 title: const Text('Appointment Reminders'),
                 value: appointmentReminders,
                 onChanged: (val) =>
                     setDialogState(() => appointmentReminders = val),
-                activeColor: Colors.teal,
+                activeThumbColor: Colors.teal,
               ),
             ],
           ),
@@ -447,7 +447,7 @@ class _DoctorMyProfileScreenState extends State<DoctorMyProfileScreen> {
                           ? ThemeMode.dark
                           : ThemeMode.light;
                     },
-                    activeColor: Colors.teal,
+                    activeThumbColor: Colors.teal,
                   ),
                 );
               },

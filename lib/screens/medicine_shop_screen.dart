@@ -17,7 +17,7 @@ class _MedicineShopScreenState extends State<MedicineShopScreen> {
   double _cartTotal = 0.0;
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _filteredMedicines = [];
-  String _selectedCategory = "All";
+  final String _selectedCategory = "All";
 
   final List<Map<String, dynamic>> _medicines = [
     // Essentials

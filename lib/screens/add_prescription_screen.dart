@@ -56,7 +56,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
-                    value: frequency,
+                    initialValue: frequency,
                     decoration: const InputDecoration(
                       labelText: 'Frequency',
                       border: OutlineInputBorder(),
@@ -333,7 +333,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                       ],
                     ),
                   );
-                }).toList(),
+                }),
 
               const SizedBox(height: 24),
 

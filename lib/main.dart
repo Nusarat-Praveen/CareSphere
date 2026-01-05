@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/splash_screen.dart'; // Import SplashScreen
 import 'screens/login_screen.dart';
 
@@ -11,7 +12,8 @@ import 'screens/doctor_main_layout.dart';
 // Global Theme Notifier
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const CareSphereApp());
 }
 
