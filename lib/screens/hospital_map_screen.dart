@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'hospital_profile_screen.dart';
 
 class HospitalMapScreen extends StatefulWidget {
@@ -11,21 +13,123 @@ class HospitalMapScreen extends StatefulWidget {
 }
 
 class _HospitalMapScreenState extends State<HospitalMapScreen> {
+  late GoogleMapController _mapController;
   Map<String, dynamic>? _selectedHospital;
+  Set<Marker> _markers = {};
 
-  // Simulated coordinates (0.0 to 1.0) for markers
-  final List<Offset> _markerPositions = [
-    const Offset(0.25, 0.35),
-    const Offset(0.55, 0.25),
-    const Offset(0.75, 0.45),
-    const Offset(0.35, 0.65),
-    const Offset(0.65, 0.75),
-    const Offset(0.15, 0.85),
-    const Offset(0.8, 0.15),
-    const Offset(0.4, 0.1),
-    const Offset(0.9, 0.6),
-    const Offset(0.1, 0.5),
-  ];
+  // Default to Bangalore initially, but will update
+  LatLng _center = const LatLng(12.9716, 77.5946);
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _determinePosition();
+  }
+
+  Future<void> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    try {
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        _useDefaultLocation();
+        return;
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          _useDefaultLocation();
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        _useDefaultLocation();
+        return;
+      }
+
+      // Added timeout to prevent infinite loading
+      Position position = await Geolocator.getCurrentPosition(
+        timeLimit: const Duration(seconds: 5),
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        _center = LatLng(position.latitude, position.longitude);
+        _isLoading = false;
+        _createMarkers(_center);
+      });
+
+      _mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: _center, zoom: 14.0),
+        ),
+      );
+    } catch (e) {
+      debugPrint("Error getting location: $e");
+      if (mounted) {
+        _useDefaultLocation();
+      }
+    }
+  }
+
+  void _useDefaultLocation() {
+    setState(() {
+      _isLoading = false;
+      _createMarkers(_center);
+    });
+  }
+
+  void _createMarkers(LatLng centerPoint) {
+    Set<Marker> newMarkers = {};
+    for (int i = 0; i < widget.hospitals.length; i++) {
+      final hospital = widget.hospitals[i];
+      // Create a deterministic but scattered position AROUND the user
+      // Using simple offsets
+      final double latOffset = (i % 3 - 1) * 0.01 + (i * 0.002);
+      final double lngOffset = (i % 4 - 1.5) * 0.01 - (i * 0.002);
+
+      final LatLng position = LatLng(
+        centerPoint.latitude + latOffset,
+        centerPoint.longitude + lngOffset,
+      );
+
+      newMarkers.add(
+        Marker(
+          markerId: MarkerId('hospital_$i'),
+          position: position,
+          infoWindow: InfoWindow(
+            title: hospital['name'],
+            snippet: hospital['type'],
+          ),
+          onTap: () {
+            setState(() {
+              _selectedHospital = hospital;
+            });
+          },
+        ),
+      );
+    }
+    setState(() {
+      _markers = newMarkers;
+    });
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+    if (!_isLoading) {
+      _mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: _center, zoom: 14.0),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,119 +146,17 @@ class _HospitalMapScreenState extends State<HospitalMapScreen> {
       ),
       body: Stack(
         children: [
-          // Simulated Map Background
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.grey.shade200,
-            child: _buildSimulatedMap(),
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(target: _center, zoom: 13.0),
+            markers: _markers,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            zoomControlsEnabled: false,
+            mapToolbarEnabled: false,
           ),
 
-          // Hospital Markers
-          ...List.generate(
-            widget.hospitals.length > _markerPositions.length
-                ? _markerPositions.length
-                : widget.hospitals.length,
-            (index) {
-              final pos = _markerPositions[index];
-              final hospital = widget.hospitals[index];
-              return Positioned(
-                left: MediaQuery.of(context).size.width * pos.dx,
-                top: MediaQuery.of(context).size.height * 0.7 * pos.dy,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedHospital = hospital;
-                    });
-                  },
-                  child: AnimatedScale(
-                    scale: _selectedHospital == hospital ? 1.2 : 1.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                            border: Border.all(
-                              color: _selectedHospital == hospital
-                                  ? Colors.indigo
-                                  : Colors.white,
-                              width: 2,
-                            ),
-                          ),
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.indigo.shade50,
-                            child: Icon(
-                              hospital['image'] as IconData,
-                              color: Colors.indigo,
-                              size: 24,
-                            ),
-                          ),
-                        ),
-                        if (_selectedHospital == hospital)
-                          Container(
-                            margin: const EdgeInsets.only(top: 4),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.indigo,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              (hospital['name'] as String).split(' ').first,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-
-          // User Location Marker (Static)
-          Center(
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.2),
-                shape: BoxShape.circle,
-              ),
-              child: Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.blue.withOpacity(0.5),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          if (_isLoading) const Center(child: CircularProgressIndicator()),
 
           // Selected Hospital Card
           if (_selectedHospital != null)
@@ -167,10 +169,6 @@ class _HospitalMapScreenState extends State<HospitalMapScreen> {
         ],
       ),
     );
-  }
-
-  Widget _buildSimulatedMap() {
-    return CustomPaint(painter: MapPainter());
   }
 
   Widget _buildHospitalInfoCard(Map<String, dynamic> hospital) {
@@ -268,55 +266,4 @@ class _HospitalMapScreenState extends State<HospitalMapScreen> {
       ),
     );
   }
-}
-
-class MapPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Draw some simulated "roads"
-    final roadPaint = Paint()
-      ..color = Colors.grey.shade300
-      ..strokeWidth = 30
-      ..style = PaintingStyle.stroke;
-
-    final path = Path();
-    path.moveTo(0, size.height * 0.3);
-    path.lineTo(size.width, size.height * 0.4);
-
-    path.moveTo(size.width * 0.5, 0);
-    path.lineTo(size.width * 0.4, size.height);
-
-    path.moveTo(0, size.height * 0.8);
-    path.quadraticBezierTo(
-      size.width * 0.3,
-      size.height * 0.7,
-      size.width,
-      size.height * 0.9,
-    );
-
-    canvas.drawPath(path, roadPaint);
-
-    // Draw some "buildings/parks"
-    final parkPaint = Paint()
-      ..color = Colors.green.shade100.withOpacity(0.5)
-      ..style = PaintingStyle.fill;
-
-    canvas.drawRect(Rect.fromLTWH(40, 60, 80, 50), parkPaint);
-
-    final buildingPaint = Paint()
-      ..color = Colors.grey.shade400.withOpacity(0.3)
-      ..style = PaintingStyle.fill;
-
-    canvas.drawRect(
-      Rect.fromLTWH(size.width - 120, 150, 90, 70),
-      buildingPaint,
-    );
-    canvas.drawRect(
-      Rect.fromLTWH(80, size.height - 180, 60, 100),
-      buildingPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
